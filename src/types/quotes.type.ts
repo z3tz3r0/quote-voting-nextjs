@@ -1,12 +1,28 @@
+export const quoteCategories = [
+  "All",
+  "Funny",
+  "Inspirational",
+  "Life",
+  "Wisdom",
+] as const;
+
+export type QuoteCategory = (typeof quoteCategories)[number];
+
 export interface QuoteData {
   id: number;
   text: string;
   author: string;
-  category: "All" | "Funny" | "Inspirational" | "Life" | "Wisdom";
-  likes: number;
+  category: QuoteCategory;
+  votes: number;
 }
+
+export type VoteType = "upvote" | "downvote";
 
 export interface VotePostProps {
   quote: QuoteData;
-  handleLike: (quoteId: number) => void;
+  handleVote: (quoteId: number, voteType: VoteType) => void;
+}
+
+export interface AddQuoteProps {
+  handleAddQuote: (newQuote: QuoteData) => void;
 }
