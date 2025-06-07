@@ -7,7 +7,7 @@ const NavBar = () => {
   const { data: session } = useSession();
   return (
     <header className="flex justify-between w-full p-4 bg-muted sticky top-0 z-99">
-      <Link href="/" className="text-xl font-bold">
+      <Link href="#" className="text-xl font-bold">
         Quote Voter
       </Link>
       <div className="flex gap-4 items-center">
