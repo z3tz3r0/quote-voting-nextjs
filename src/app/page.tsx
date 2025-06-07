@@ -10,12 +10,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import VotePost from "@/components/VotePost";
 import VotePostSkeleton from "@/components/VotePostSkeleton";
 import {
   quoteCategories,
   QuoteCategory,
   QuoteData,
+  SortOrder,
   VoteType,
 } from "@/types/quotes.type";
 import { useSession } from "next-auth/react";
@@ -27,6 +35,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentCategory, setCurrentCategory] = useState<QuoteCategory>("All");
   const [categorizedQuotes, setCategorizedQuotes] = useState<QuoteData[]>([]);
+  const [currentSortOrder, setCurrentSortOrder] =
+    useState<SortOrder>("default");
   const [displayQuotes, setDisplayQuotes] = useState<QuoteData[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -57,7 +67,7 @@ export default function Home() {
   }, [searchTerm]);
 
   useEffect(() => {
-    let result = allQuotes;
+    let result = [...allQuotes];
 
     if (currentCategory !== "All") {
       result = result.filter((quote) => quote.category === currentCategory);
@@ -73,9 +83,18 @@ export default function Home() {
       });
     }
 
+    switch (currentSortOrder) {
+      case "votes-desc":
+        result.sort((a, b) => b.votes - a.votes);
+        break;
+      case "votes-asc":
+        result.sort((a, b) => a.votes - b.votes);
+        break;
+    }
+
     setCategorizedQuotes(result);
     setDisplayQuotes(result.slice(0, QUOTE_PER_PAGE));
-  }, [allQuotes, currentCategory, debouncedSearchTerm]);
+  }, [allQuotes, currentSortOrder, currentCategory, debouncedSearchTerm]);
 
   const handleVote = (quoteId: number, voteType: VoteType) => {
     const updateVotes = (quote: QuoteData) => {
@@ -133,6 +152,19 @@ export default function Home() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-background"
             />
+            <Select
+              value={currentSortOrder}
+              onValueChange={(value) => setCurrentSortOrder(value as SortOrder)}
+            >
+              <SelectTrigger className="w-full md:w-[200px]">
+                <SelectValue placeholder="Sort by..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">Newest First</SelectItem>
+                <SelectItem value="votes-desc">Most Liked</SelectItem>
+                <SelectItem value="votes-asc">Least Liked</SelectItem>
+              </SelectContent>
+            </Select>
           </section>
 
           {/* Only login user can add quote here */}

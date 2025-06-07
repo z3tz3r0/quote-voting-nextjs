@@ -11,6 +11,7 @@ A dynamic and interactive web application built with Next.js, designed to allow 
 - **Category Filtering**: Effortlessly filter quotes by various categories to find content that interests you.
 - **Search Functionality**: Efficiently search for quotes by author or quote message using a debounced search bar for a smooth user experience.
 - **Infinite Scroll**: Enjoy a continuous browsing experience with infinite scroll implemented for quote listings.
+- **Quote Sorting**: Sort quotes by the number of likes (most or least liked) or by newest first.
 
 ## Technologies Used
 

@@ -26,3 +26,7 @@ export interface VotePostProps {
 export interface AddQuoteProps {
   handleAddQuote: (newQuote: QuoteData) => void;
 }
+
+export const sortOrder = ["default", "votes-desc", "votes-asc"] as const;
+
+export type SortOrder = (typeof sortOrder)[number];
