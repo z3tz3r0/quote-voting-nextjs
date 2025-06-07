@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { VotePostProps } from "@/types/quotes.type";
-import { ThumbsUpIcon } from "lucide-react";
+import { ThumbsDownIcon, ThumbsUpIcon } from "lucide-react";
 import { FC } from "react";
 
-const VotePost: FC<VotePostProps> = ({ quote, handleLike }) => {
+const VotePost: FC<VotePostProps> = ({ quote, handleVote }) => {
   return (
     <Card>
       <CardHeader>
@@ -29,17 +29,37 @@ const VotePost: FC<VotePostProps> = ({ quote, handleLike }) => {
       </CardContent>
       <Separator />
       <CardFooter className="flex justify-between">
-        <Button
-          variant="ghost"
-          className="px-16 rounded-full"
-          onClick={() => handleLike(quote.id)}
-        >
-          <ThumbsUpIcon />
-          Like
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={() => handleVote(quote.id, "upvote")}
+          >
+            <ThumbsUpIcon />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={() => handleVote(quote.id, "downvote")}
+          >
+            <ThumbsDownIcon />
+          </Button>
+        </div>
         <p>
-          <b>{new Intl.NumberFormat().format(quote.likes)}</b>{" "}
-          {quote.likes === 1 ? "like" : "likes"}
+          <b
+            className={
+              quote.votes < 0
+                ? "text-red-500"
+                : quote.votes > 0
+                ? "text-green-500"
+                : "text-black"
+            }
+          >
+            {new Intl.NumberFormat().format(quote.votes)}
+          </b>{" "}
+          {quote.votes === 1 ? "like" : "likes"}
         </p>
       </CardFooter>
     </Card>
